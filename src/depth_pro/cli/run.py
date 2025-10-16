@@ -38,7 +38,7 @@ def run(args):
     # Load model.
     model, transform = create_model_and_transforms(
         device=get_torch_device(),
-        precision=torch.half,
+        precision=torch.float32,
     )
     model.eval()
 
@@ -95,7 +95,7 @@ def run(args):
             np.savez_compressed(output_file, depth=depth)
 
             # Save as color-mapped "turbo" jpg image.
-            cmap = plt.get_cmap("turbo")
+            cmap = plt.get_cmap("viridis")
             color_depth = (cmap(inverse_depth_normalized)[..., :3] * 255).astype(
                 np.uint8
             )

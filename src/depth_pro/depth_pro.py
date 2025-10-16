@@ -72,7 +72,7 @@ def create_backbone_model(
 def create_model_and_transforms(
     config: DepthProConfig = DEFAULT_MONODEPTH_CONFIG_DICT,
     device: torch.device = torch.device("cpu"),
-    precision: torch.dtype = torch.float32,
+    precision: torch.dtype = torch.float16,
 ) -> Tuple[DepthPro, Compose]:
     """Create a DepthPro model and load weights from `config.checkpoint_uri`.
 
@@ -280,7 +280,7 @@ class DepthPro(nn.Module):
 
         canonical_inverse_depth, fov_deg = self.forward(x)
         if f_px is None:
-            f_px = 0.5 * W / torch.tan(0.5 * torch.deg2rad(fov_deg.to(torch.float)))
+            f_px = 0.5 * W / torch.tan(0.5 * torch.deg2rad(fov_deg.to(torch.float16)))
         
         inverse_depth = canonical_inverse_depth * (W / f_px)
         f_px = f_px.squeeze()
